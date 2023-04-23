@@ -1,14 +1,33 @@
-body{
-    background-color: #f2f2f2;
+/* Set the background color of the page */
+body {
+background-color: #f2f2f2;
 }
-.buttons {
-    color: blue;
-  position: absolute;
-  top: 20px;
-  right: 20px;
 
-  text-align: right;
+/* Style the buttons */
+.buttons {
+position: absolute;
+top: 20px;
+right: 20px;
+text-align: right;
+color: blue;
 }
+
+button {
+background-color: #007bff;
+border: none;
+color: #fff;
+padding: 8px 16px;
+font-size: 16px;
+border-radius: 4px;
+cursor: pointer;
+transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+background-color: #0069d9;
+}
+
+/* Style the table */
 table {
   border-collapse: collapse;
   margin: 20px 0;
@@ -31,6 +50,8 @@ table td {
 
 table tbody tr {
   border-bottom: 1px solid #dddddd;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
 table tbody tr:nth-of-type(even) {
@@ -40,348 +61,77 @@ table tbody tr:nth-of-type(even) {
 table tbody tr:last-of-type {
   border-bottom: 2px solid #009879;
 }
-
-/* Стилизуем label */
-.city-select {
-   top: 20px;
-    text-align: left;
-  font-size: 18px;
-  color: #333;
-margin-top: 10px;
-  display: block;
-  margin-bottom: 10px;
+#tableBox {
+  margin: auto;
 }
-.type-select {
-   top: 20px;
-    text-align: left;
-  font-size: 18px;
-  color: #333;
-margin-top: 10px;
-  display: block;
-  margin-bottom: 10px;
-
-}
-/* Стилизуем select */
-select {
-  font-size: 13px;
-  color: #333;
-  background: #fff;
-  border: 2px solid #333;
-  padding: 10px;
-  border-radius: 5px;
-  width: 140px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M464.3 192H47.7c-14.7 0-22.1 17.8-11.7 28.3L232 399.7l196.1-179.4c10.4-10.4 3-28.3-11.8-28.3z'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 10px top 50%;
-  background-size: 12px;
-}
-
-/* Стилизуем опции */
-select option {
-  background: #fff;
-  color: #333;
-}
-.btn {
-  display: inline-block;
-  font-size: 18px;
-  color: #fff;
-  text-align: center;
-  text-decoration: none;
-  padding: 12px 24px;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
-
-.btn-signup {
-  background-color: hotpink;
-}
-
-.btn-login {
-  background-color: pink;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-}
-.menu {
-        margin-top: 100px;
-        width: border-box;
-        height: 500px;
-        overflow-y: scroll;
-        background-color: #f5f5f5;
-        padding: 10px;
-        box-sizing: border-box;
-      }
-
-      /* Стили для ячеек */
-      .cell {
+     #tableContainer {
         display: flex;
-        align-items: center;
         justify-content: center;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        padding: 10px;
-        margin-bottom: 10px;
+        align-items: center;
+        height: 100vh;
       }
-
-
-
-      .cost{
-         display: inline-block;
-  font-size: 10px;
-  color: #fff;
-  text-align: center;
-  text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-         background-color: hotpink;
+      #tableBox {
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 1em;
+        font-family: sans-serif;
+        min-width: 400px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        border-radius: 10px;
+        overflow: hidden;
       }
-      .cost:hover {
-  transform: translateY(-2px);
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-}
-      header {
-          width: border-box;
-           padding: 0;
-          margin: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  background-color: #f2f2f2;
-}
-
-.logo {
-  width: 50px;
-  height: 50px;
-}
-
-nav ul {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-nav li {
-  margin: 0 10px;
-}
-
-nav a {
+      #tableBox thead tr {
+        background-color: #009879;
+        color: #ffffff;
+        text-align: left;
+      }
+      #tableBox th, #tableBox td {
+        padding: 12px 15px;
+      }
+      #tableBox tbody tr {
+        border-bottom: 1px solid #dddddd;
+      }
+      #tableBox tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+      }
+      #tableBox tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+      }
+      #countBox {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #009879;
+        color: #ffffff;
+        padding: 5px;
+        border-radius: 5px;
+      }
+      /* Выравнивание по центру */
+#searchInput, #searchFrom, #searchTo {
   display: block;
-  padding: 5px;
-  text-decoration: none;
-  color: #333;
-}
-
-nav a:hover {
-  background-color: #ddd;
-}
-
-
-/* Если вы хотите добавить анимацию для вашего элемента label, то можете использовать следующие стили: */
-
-
-/* Стили для даталиста */
-.Where {
-  margin: 10px;
-  width: 150px;
+  margin: 0 auto;
   text-align: center;
 }
 
-.Where label {
-  display: block;
-  font-size: 20px;
-
-}
-
-.Where input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
+/* Стили для поля ввода */
+input[type="text"] {
+  padding: 8px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  width: 80%;
+  max-width: 400px;
+  font-size: 16px;
 }
 
-.Where input:focus {
+/* Стили для placeholder */
+::placeholder {
+  color: #aaa;
+}
+
+/* Стили при фокусе на поле ввода */
+input[type="text"]:focus {
+  border-color: #2d9bf0;
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
-
-.Where datalist {
-  width: 100%;
-  margin: 5px 0 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.Where option {
-  padding: 5px;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #333;
-  background-color: #fff;
-  border: 1px solid #ccc;
-}
-
-.Where option:checked {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.From {
-
-  width: 150px;
-  text-align: center;
-}
-
-.From label {
-   display: block;
-  font-size: 20px;
-
-}
-
-.From input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.From input:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.From datalist {
-  width: 100%;
-  margin: 5px 0 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.From option {
-  padding: 5px;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #333;
-  background-color: #fff;
-  border: 1px solid #ccc;
-}
-
-.From option:checked {
-  background-color: #007bff;
-  color: #fff;
-}
-
-
-.type-select {
-  margin: 10px;
-  width: 150px;
-  text-align: center;
-}
-
-.type-select label {
-  display: block;
-  font-size: 20px;
-
-}
-
-.type-select input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.type-select input:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.type-select datalist {
-  width: 100%;
-  margin: 5px 0 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.type-select option {
-  padding: 5px;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #333;
-  background-color: #fff;
-  border: 1px solid #ccc;
-}
-
-.type-select option:checked {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.date-select {
-  margin:10px ;
-  width: 150px;
-  text-align: center;
-}
-
-.date-select label {
-  display: block;
-  font-size: 20px;
-
-}
-
-.date-select input[type="date"] {
-  /*width: 100%;*/
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
-  color: #333;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-}
-
-/* Изменение внешнего вида для WebKit-браузеров */
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  .date-select input[type="date"]::-webkit-calendar-picker-indicator {
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    border: none;
-    padding: 5px;
-  }
-}
-
-/* Изменение внешнего вида для Firefox */
-.date-select input[type="date"]::-moz-calendar-picker-indicator {
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 5px;
-  border: none;
-  padding: 5px;
-}
-
-h3 {
-  font-size: 13px;
-  font-weight: bold;
-  color: #333;
-  text-align: center;
-  margin: 20px 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-

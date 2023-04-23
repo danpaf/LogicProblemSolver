@@ -3,102 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>SDfsdf</title>
-     <link rel="stylesheet" href="/static/style.css">
-</head>
-  <script src="/static/script.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
     <script src="/static/initJson.js"></script>
-    <script src="/static/app.js"></script>
+    <script src="/static/script.js"></script>
+</head>
 <body>
 
-   <header>
-        <div class = "From">
-           <center><label for="inputField1">Откуда:</label><br></center>
-<input list="options1" id="inputField1" name="inputField1" >
-<datalist id="options1">
-  <option value="Москва">
-  <option value="Питер">
-  <option value="Кисловодск">
-  <option value="Калуга">
-  <option value="Ярославль">
-</datalist>
-       </div>
-       <div class = "Where">
-           <center><label for="inputField">Куда:</label><br>  </center>
-<input list="options" id="inputField" name="inputField" >
-<datalist id="options">
-  <option value="Обнинск">
-  <option value="Балабаново">
-  <option value="Рыбинск">
-  <option value="Кострома">
-  <option value="Магнитогорск">
-</datalist>
-       </div>
-  <div class = "type-select">
-     <center> <label for="inputField2">Выберите тип:</label><br>  </center>
-      <input list="options2" id="inputField2" name="inputField2" />
-<datalist id="options2">
-  <option value="Любой">
-  <option value="Боковой">
-  <option value="Задний">
-
-</datalist><br>
-
-  </div>
-         <div class = "date-select">
-     <center> <label for="date-input">Выберите дату:</label><br>  </center>
-      <input type="date" id="date-input">
-<script>
-    const dateInput = document.getElementById('date-input');
-const now = new Date();
-const year = now.getFullYear();
-const month = now.getMonth() + 1;
-const day = now.getDate();
-const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-dateInput.setAttribute('min', formattedDate);
-</script>
-</div>
-
-
-</header>
-
-
-  <center>
- <div class="menu">
-     <div class = "sort-order">
-    <label for="sort-order" >Сортировать по:</label>
-<select id="sort-order">
-  <option id='vverh'>Минимальная</option>
-  <option id='vniz'>Максимальная</option>
-
-    </select>
-    <table id="tableBox">
+<input type="text" id="searchInput" onkeyup="SearchWeight()" placeholder="Вес...">
+<input type="text" id="searchFrom" onkeyup="SearchFrom()" placeholder="Куда...">
+<input type="text" id="searchTo" onkeyup="SearchTo()" placeholder="Откуда...">
+<div id="count"></div>
+<table id="tableBox">
 
 </table>
 <script>
-  const select = document.getElementById('sort-order');
-  const cells = Array.from(document.querySelectorAll('.cell'));
 
-  function sortCells() {
-    const sortOrder = select.value;
-    cells.sort((a, b) => {
-      const aValue = a.querySelector('h3').textContent;
-      const bValue = b.querySelector('h3').textContent;
-      return sortOrder === 'Минимальная' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-    });
-    cells.forEach(cell => {
-      cell.parentNode.appendChild(cell);
-    });
-  }
-
-  select.addEventListener('change', sortCells);
 </script>
-<!--<script>-->
-<!--    const authButton = document.querySelector('#auth-button');-->
-
-<!--authButton.addEventListener('click', () => {-->
-<!--  window.location.href = '/auth';-->
-<!--});-->
-<!--</script>-->
-
 </body>
 </html>

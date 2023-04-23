@@ -1,63 +1,54 @@
-window.onload = function() {
-  const inputField = document.getElementById('inputField');
-  const datalist = document.getElementById('options');
-
-  inputField.addEventListener('input', function() {
-    let inputVal = this.value;
-    let optionsArr = Array.from(datalist.options);
-
-    let filteredOptions = optionsArr.filter(function(option) {
-      return option.value.toLowerCase().startsWith(inputVal.toLowerCase());
-    });
-
-    datalist.innerHTML = '';
-
-    filteredOptions.forEach(function(option) {
-      datalist.appendChild(option);
-    });
-  });
-};
-window.onload = function() {
-  const inputField1 = document.getElementById('inputField1');
-  const datalist1 = document.getElementById('options1');
-
-  inputField1.addEventListener('input', function() {
-    let inputVal = this.value;
-    let optionsArr = Array.from(datalist1.options);
-
-    let filteredOptions = optionsArr.filter(function(option) {
-      return option.value.toLowerCase().startsWith(inputVal.toLowerCase());
-    });
-
-    datalist1.innerHTML = '';
-
-    filteredOptions.forEach(function(option) {
-      datalist1.appendChild(option);
-    });
-  });
-};
-
-
-// window.onload = function() {
-//   const inputField2 = document.getElementById('inputField2');
-//   const datalist2 = document.getElementById('options2');
-//
-//   inputField2.addEventListener('input', function() {
-//     let inputVal = this.value;
-//     let optionsArr = Array.from(datalist2.options);
-//
-//     let filteredOptions = optionsArr.filter(function(option) {
-//       return option.value.toLowerCase().startsWith(inputVal.toLowerCase());
-//     });
-//
-//     datalist2.innerHTML = '';
-//
-//     filteredOptions.forEach(function(option) {
-//       datalist2.appendChild(option);
-//     });
-//   });
-// };
-
-
-
-
+function SearchWeight() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tableBox");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+function SearchFrom() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchFrom");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tableBox");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[3];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+function SearchTo() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchTo");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tableBox");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[2];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}

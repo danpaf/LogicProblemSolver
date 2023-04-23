@@ -1,45 +1,55 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const table = document.getElementById("tableBox");
+const table = document.getElementById("tableBox");
 
-  // Создание заголовков столбцов таблицы
-  const headers = ["Вес", "Длина", "Маршрут", "Тип загрузки", "Начальная дата", "Конечная дата"];
-  const headerRow = document.createElement("tr");
+// Создание заголовков столбцов таблицы
+const headers = ["Вес", "Длина", "Откуда", "Куда", "Маршрут", "Тип загрузки", "Начальная дата", "Конечная дата", ""];
+const headerRow = document.createElement("tr");
 
-  for (let header of headers) {
-    const th = document.createElement("th");
-    th.textContent = header;
-    headerRow.appendChild(th);
-  }
+for (let header of headers) {
+  const th = document.createElement("th");
+  th.textContent = header;
+  headerRow.appendChild(th);
+}
 
-  table.appendChild(headerRow);
+table.appendChild(headerRow);
 
-  // Чтение данных из API
-  fetch("http://127.0.0.1:8000/cycles")
-      .then(response => response.json())
-      .then(data => {
-        // Создание строк таблицы
-        for (let item of data) {
+// Чтение данных из API
+fetch("http://127.0.0.1:8000/cycles")
+  .then(response => response.json())
+  .then(data => {
+      // Создание строк таблицы
+      for (let item of data) {
           const row = document.createElement("tr");
 
-          // Ширина
-          const widthCell = document.createElement("td");
-          widthCell.textContent = item.weight;
-          row.appendChild(widthCell);
+          // Вес
+          const weightCell = document.createElement("td");
+          weightCell.textContent = item.weight;
+          row.appendChild(weightCell);
 
           // Длина
-          const lenCell = document.createElement("td");
-          lenCell.textContent = item.len;
-          row.appendChild(lenCell);
+          const lengthCell = document.createElement("td");
+          lengthCell.textContent = item.len;
+          row.appendChild(lengthCell);
+
+          // Откуда
+          const fromCell = document.createElement("td");
+          fromCell.textContent = item.from;
+          row.appendChild(fromCell);
+
+          // Куда
+          const toCell = document.createElement("td");
+          toCell.textContent = item.to;
+          row.appendChild(toCell);
 
           // Маршрут
-          const cycleCell = document.createElement("td");
-          cycleCell.textContent = item.cycle.join(", ");
-          row.appendChild(cycleCell);
+          const routeCell = document.createElement("td");
+          routeCell.textContent = item.cycle.join(", ");
+          row.appendChild(routeCell);
 
-          // Тип края
-          const edgeTypeCell = document.createElement("td");
-          edgeTypeCell.textContent = item.edge_type;
-          row.appendChild(edgeTypeCell);
+          // Тип загрузки
+          const loadingTypeCell = document.createElement("td");
+          loadingTypeCell.textContent = item.edge_type;
+          row.appendChild(loadingTypeCell);
 
           // Начальная дата
           const startDateCell = document.createElement("td");
@@ -51,8 +61,23 @@ document.addEventListener('DOMContentLoaded', function() {
           endDateCell.textContent = item.end_date;
           row.appendChild(endDateCell);
 
+          // Кнопка "Предложить цену"
+          const priceCell = document.createElement("td");
+          const priceButton = document.createElement("button");
+          priceButton.textContent = "Предложить цену";
+          priceCell.appendChild(priceButton);
+          row.appendChild(priceCell);
+
           table.appendChild(row);
+
+          // Отображаем количество строк в таблице
+          const countDiv = document.getElementById("count");
+          const rowCount = table.rows.length;
+          countDiv.innerHTML = `DEBUG: Количество строк: ${rowCount}`;
         }
       })
       .catch(error => console.error(error));
 });
+
+
+
