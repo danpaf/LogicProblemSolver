@@ -63,4 +63,3 @@ def get_cycles(target_edge_type):
                 cycles.append((cycle, travel_times))
 
     return cycles
-
