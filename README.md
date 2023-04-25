@@ -26,3 +26,4 @@ If you have any suggestions or contributions to make to the program, please feel
 ## License
 
 This program is licensed under the MIT License. See the `LICENSE` file for more information.
+
