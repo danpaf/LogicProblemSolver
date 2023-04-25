@@ -1,5 +1,3 @@
-# write a license.md file for my project https://github.com/danpaf/logisticsProblemSolver
-
 # License for logisticsProblemSolver
 
 This project is licensed under the MIT License.
