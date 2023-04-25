@@ -7,17 +7,22 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from fastapi.responses import HTMLResponse
-#
-# import funcs
-from FastApi import get_cycles, build_cycle_response
-# from db.models import NodeDBModel, RibDBModel
-# from settings import init_db
+
+import funcs
+from db.models import NodeDBModel, RibDBModel
+from settings import init_db
+
+init_db()
+
+
+
+node = NodeDBModel.select()[0]
+rib = RibDBModel.select().where(RibDBModel.from_node == node)
+
+answers = funcs.getRoutes()
+answers = funcs.remove_duplicates_from_json("answers.json")
 
 app = FastAPI()
-
-# node = NodeDBModel.select()[0]
-# rib = RibDBModel.select().where(RibDBModel.from_node==node)
-# funcs.getRoutes(node,rib)
 # Модель для данных о пользователе
 class User(BaseModel):
     username: str

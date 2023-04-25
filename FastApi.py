@@ -5,8 +5,6 @@ from pydantic import BaseModel
 import networkx as nx
 from db.models import NodeDBModel, RibDBModel
 
-app = FastAPI()
-
 
 class CycleResponse(BaseModel):
     start: str
