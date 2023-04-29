@@ -1,20 +1,20 @@
-# Logistics Problem Solver
+# Logistics Route Optimizer
 
-This is a logistics problem solver program written in Python. It is designed to solve problems related to logistics, such as determining the most efficient route for delivering goods or optimizing transportation costs.
+This program optimizes logistics routes and transportation costs using Python. It allows for the efficient delivery of goods by determining the best routes and modes of transportation based on various factors.
 
 ## Installation
 
-To use this program, you must have Python installed on your computer. You can download the latest version of Python from the official website: [https://www.python.org/downloads/](https://www.python.org/downloads/)
+To use this program, you need to have Python installed on your computer. You can download the latest version of Python from the official website: [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
-Once you have installed Python, you can download the program files from the GitHub repository: [https://github.com/danpaf/logisticsProblemSolver](https://github.com/danpaf/logisticsProblemSolver)
+Once you have installed Python, you can download the program files from the GitHub repository: [https://github.com/danpaf/logisticsRouteOptimizer](https://github.com/danpaf/logisticsRouteOptimizer)
 
 ## Usage
 
-To use the program, simply run the `logisticsProblemSolver.py` file using Python. The program will prompt you to input the necessary data for the logistics problem you want to solve.
+To use the program, you need to provide a .csv file that will be cleaned and converted to JSON. This will create new routes and nodes that can be tracked on a website.
 
-The program currently supports the following features:
+The program supports the following features:
 
-- Calculation of the most efficient route for delivering goods
+- Calculation of the most efficient delivery routes
 - Optimization of transportation costs by selecting the best mode of transportation (e.g. truck, train, ship, etc.)
 - Handling of multiple warehouses and delivery destinations
 - Calculation of delivery times based on distance and transportation mode
@@ -26,4 +26,3 @@ If you have any suggestions or contributions to make to the program, please feel
 ## License
 
 This program is licensed under the MIT License. See the `LICENSE` file for more information.
-
