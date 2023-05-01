@@ -35,4 +35,5 @@ def init_tables(db: SqliteDatabase):
             NodeDBModel,
             RibDBModel
         ])
+        db.commit()
 

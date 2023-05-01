@@ -1,12 +1,15 @@
 import datetime
+from datetime import date
 import json
 import pprint
+import uuid
 
 import networkx as nx
 import requests
 import time
 
 from db.models import NodeDBModel, RibDBModel
+from settings import init_db
 
 
 def get_coordinates(city_name):
@@ -16,15 +19,16 @@ def get_coordinates(city_name):
     result = json.loads(response.content)
     if result and result.get('bbox'):
         lat, lon = result.get('bbox')[0], result.get('bbox')[1]
-        print(lat,lon)
+        print(lat, lon)
         return lat, lon
     else:
         print(f"No coordinates found for {formatted_city} Response{response.text}")
         return None, None
 
+
 def get_route(from_city, to_city):
     from_coords = get_coordinates(from_city)
-    print(from_city,from_coords)
+    print(from_city, from_coords)
     to_coords = get_coordinates(to_city)
     print(to_coords[1])
     if from_coords is None or to_coords is None:
@@ -39,16 +43,28 @@ def get_route(from_city, to_city):
 
     distance = result['features'][0]['properties']['segments'][0]['distance']
     duration = result['features'][0]['properties']['segments'][0]['duration']
-    print(distance, "дистанция",duration , "время")
+    print(distance, "дистанция", duration, "время")
     return distance, duration, None
+
+
+
 def remove_duplicates_from_json(filename):
     with open(filename, 'r') as f:
         data = json.load(f)
 
     unique_data = []
     for record in data:
-        if record not in unique_data:
-            unique_data.append(record)
+        if 'city' in record:
+            city = record['city']
+            is_unique = True
+            for unique_record in unique_data:
+                if 'city' in unique_record:
+                    # проверяем все поля кроме id
+                    if all(city.get(key) == unique_record['city'].get(key) for key in city.keys() if key != 'id'):
+                        is_unique = False
+                        break
+            if is_unique:
+                unique_data.append(record)
 
     with open(filename, 'w') as f:
         json.dump(unique_data, f, ensure_ascii=False, indent=4)
@@ -56,24 +72,22 @@ def remove_duplicates_from_json(filename):
     with open(filename, 'r') as f:
         return json.load(f)
 
-def getRoutes():
-    cities_to_hide = ['Node 1', 'Node 2', 'Node 3', 'Node 4']
-    nodes = NodeDBModel.select()
-    ribs = RibDBModel.select()
 
+
+
+
+
+def getRoutes():
     G = nx.MultiDiGraph()
     for r in RibDBModel.select():
         city1 = r.from_node.title
         city2 = r.to_node.title
 
-        if city1 not in cities_to_hide and city2 not in cities_to_hide:
-            weight = r.time
-            date = datetime.datetime.strptime(r.date, '%d.%m.%Y').date()
-            edge_type = r.type  # добавляем тип разгрузки на ребро
-            edge_attrs = {'weight': weight, 'edge_type': edge_type, 'date': date}
-            G.add_weighted_edges_from([(city1, city2, edge_attrs)])  # добавляем тип разгрузки на ребро
+        weight = r.time
+        date = datetime.datetime.strptime(r.date, '%d.%m.%Y').date()
+        edge_attrs = {'weight': weight, 'edge_type': r.type, 'date': date}
+        G.add_weighted_edges_from([(city1, city2, edge_attrs)])
 
-    # Ищем циклы, учитывая тип разгрузки на каждой точке маршрута
     target_edge_type = "любой"
     if target_edge_type == 'любой':
         valid_edge_types = ['любой', 'боковой', 'задний']
@@ -82,19 +96,24 @@ def getRoutes():
     elif target_edge_type == 'задний':
         valid_edge_types = ['любой', 'задний']
 
-    # Ищем циклы, учитывая тип разгрузки на каждой точке маршрута
     cycles = []
     id = 0
     for node in NodeDBModel.select():
-
         for cycle in nx.simple_cycles(G, len(G.nodes)):
             valid_cycle = True
             for i in range(len(cycle) - 1):
                 edge_data = G.get_edge_data(cycle[i], cycle[i + 1])
-                edge_type = edge_data[0]['weight']['edge_type']  # получаем тип разгрузки на ребре
-                if target_edge_type != edge_type not in target_edge_type:
+                edge_type = edge_data[0]['weight']['edge_type']
+                if target_edge_type != 'любой' and edge_type not in valid_edge_types:
                     valid_cycle = False
                     break
+                if i == 0:
+                    start_time = edge_data[0]['weight']['date']
+                elif i == len(cycle) - 2:
+                    end_time = edge_data[0]['weight']['date']
+                    if start_time == end_time and end_time < start_time:
+                        valid_cycle = False
+                        break
 
             if valid_cycle:
                 cycles.append(cycle)
@@ -102,34 +121,69 @@ def getRoutes():
     answers = []
 
     for cycle in cycles:
-        for i, city in enumerate(cycle):
-            if i < len(cycle) - 1:
-                edge = G.get_edge_data(city, cycle[i + 1])
-                if edge:
-                    first_edge = edge[0]
-                    break
-        start_date = str(first_edge['weight']['date'])
-        formatted_date = datetime.datetime.strptime(start_date, '%Y-%m-%d').strftime('%d.%m.%Y')
-
+        ...
+        cycle_dates = []
         cycle_weight = 0
         cycle_dates = []
+        from_city = cycle[0]
+        to_city = cycle[-1]
+
+        first_edge = None
         for i in range(len(cycle) - 1):
-            from_city = cycle[0]
-            to_city = cycle[-1]
-            edge_data = G.get_edge_data(cycle[i], cycle[i + 1])
-            weight_dict = edge_data[0]['weight']
-            weight = weight_dict['weight']
-            edge_datetime = datetime.datetime.combine(weight_dict['date'], weight)
-            cycle_dates.append(edge_datetime.date())
-            cycle_weight += edge_datetime.hour
+            edge = G.get_edge_data(cycle[i], cycle[i + 1])
+            if edge:
+                first_edge = edge[0]
+                break
+
+        if first_edge is not None:
+            start_date = first_edge['weight']['date']
+            formatted_start_date = datetime.datetime.strptime(str(start_date), '%Y-%m-%d').date()
+
+            last_edge = None
+            for i in range(len(cycle) - 1):
+                edge = G.get_edge_data(cycle[i], cycle[i + 1])
+                if edge:
+                    last_edge = edge[0]
+
+            if last_edge is not None:
+                end_date = last_edge['weight']['date']
+                formatted_end_date = datetime.datetime.strptime(str(end_date), '%Y-%m-%d').date()
+                if(formatted_start_date < formatted_end_date):
+                    interval = formatted_end_date - formatted_start_date
+                    if interval <= datetime.timedelta(days=2):
+
+
+                        for i in range(len(cycle) - 1):
+                            edge_data = G.get_edge_data(cycle[i], cycle[i + 1])
+                            weight_dict = edge_data[0]['weight']
+                            weight = weight_dict['weight']
+                            edge_datetime = datetime.datetime.combine(weight_dict['date'], weight)
+                            cycle_dates.append(edge_datetime.date())
+                            cycle_weight += edge_datetime.hour
+
+                            if i == 0:
+                                from_city_type = edge_data[0]['weight'].get('edge_type')
+
+
 
         id += 1
-        answers.append({'weight': cycle_weight, 'len': len(cycle), 'cycle': cycle, 'edge_type': edge_type,
-                        'start_date': formatted_date, 'end_date': r.date,'from': from_city,'to':to_city})
+        answers.append({
+            'city': {
+                'weight': cycle_weight,
+                'len': len(cycle),
+                'cycle': cycle,
+                'edge_type': edge_type,
+                'start_date': datetime.datetime.strptime(str(formatted_start_date), '%Y-%m-%d').strftime('%d.%m.%Y'),
+                'end_date': datetime.datetime.strptime(str(formatted_end_date), '%Y-%m-%d').strftime('%d.%m.%Y'),
 
-    answers = list(filter(lambda x: x['weight'] > 0, answers))
-    answers = sorted(answers, key=lambda x: (x['len'], -x['weight']))
+                'from': from_city,
+                'to': to_city,
+                'id': f'{uuid.uuid4()}',
+            }})
+
+    answers = list(filter(lambda x: x['city']['weight'] > 0, answers))
+    answers = sorted(answers, key=lambda x: (x['city']['len'], -x['city']['weight']))
+
     with open('answers.json', 'w') as f:
         json.dump(answers, f, ensure_ascii=False, indent=4)
     return answers
-

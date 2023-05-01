@@ -1,4 +1,9 @@
 /* Set the background color of the page */
+html {
+  scrollbar-width: 10px;
+  scrollbar-color: #007bff #333f76;
+    scrollbar-gutter: auto;
+}
 body {
 background-color: #f2f2f2;
 }
@@ -134,4 +139,26 @@ input[type="text"] {
 input[type="text"]:focus {
   border-color: #2d9bf0;
   outline: none;
+}
+/* Цвет скроллбара и его трека */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background-color: #f5f5f5;
+}
+
+/* Трек скроллбара */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Цвет ползунка скроллбара */
+::-webkit-scrollbar-thumb {
+  background-color:blue;
+  border-radius: 10px;
+}
+
+/* Цвет ползунка при наведении на него курсора мыши */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
 }

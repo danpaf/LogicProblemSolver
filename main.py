@@ -13,14 +13,15 @@ from db.models import NodeDBModel, RibDBModel
 from settings import init_db
 
 init_db()
-
-
-
 node = NodeDBModel.select()[0]
 rib = RibDBModel.select().where(RibDBModel.from_node == node)
 
 answers = funcs.getRoutes()
-answers = funcs.remove_duplicates_from_json("answers.json")
+answers2 = funcs.remove_duplicates_from_json("answers.json")
+if(answers == answers2):
+    print("хуйня")
+
+
 
 app = FastAPI()
 # Модель для данных о пользователе
@@ -32,18 +33,6 @@ class User(BaseModel):
 users_db = []
 
 # Маршрут для регистрации пользователя
-@app.post("/register")
-def register_user(user: User):
-    # Проверяем, что такого пользователя еще нет в базе данных
-    for existing_user in users_db:
-        if existing_user.username == user.username:
-            return {"error": "Пользователь с таким именем уже зарегистрирован"}
-
-    # Добавляем пользователя в базу данных
-    users_db.append(user)
-
-    # Возвращаем успешный ответ
-    return {"success": "Пользователь успешно зарегистрирован"}
 
 @app.get("/js")
 async def get_js():
