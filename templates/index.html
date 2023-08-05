@@ -6,12 +6,36 @@
     <link rel="stylesheet" href="/static/style.css">
     <script src="/static/initJson.js"></script>
     <script src="/static/script.js"></script>
-</head>
-<body>
+    <!-- Подключение CSS-файла -->
+    <link rel="stylesheet" href="/static/modal.css">
 
+    <!-- Подключения JavaScript-файла -->
+    <script src="/static/modal.js"></script>
+</head>
+<header>
+  <div class="wrap-logo">
+  <a href="#logo" class="logo">МАРШРУТЫ ЖИЕС</a>
+  </div>
+  <nav>
+    <a class="active" href="#home">Главная</a>
+    <a href="#contact">Контакты</a>
+    <a href="#about">О нас</a>
+  </nav>
+</header>
+<body>
+<div class="inputfields">
 <input type="text" id="searchInput" onkeyup="SearchWeight()" placeholder="Вес...">
 <input type="text" id="searchFrom" onkeyup="SearchFrom()" placeholder="Куда...">
 <input type="text" id="searchTo" onkeyup="SearchTo()" placeholder="Откуда...">
+</div>
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div id="modalData">фывфыв</div>
+  </div>
+</div>
+
+</div>
 <div id="count"></div>
 <table id="tableBox">
 

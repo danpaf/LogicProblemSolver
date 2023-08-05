@@ -29,11 +29,27 @@ class RibDBModel(Model):
         database = db_proxy
 
 
+class RouteDBModel(Model):
+    uuid = UUIDField(primary_key=True, default=uuid.uuid4)
+    cycle = CharField()
+    weight = IntegerField()
+    length = IntegerField()
+    edge_type = CharField()
+    start_date = DateField()
+    end_date = DateField()
+    cityfrom = CharField()
+    cityto = CharField()
+
+    class Meta:
+        db_table = 'routes'
+        database = db_proxy
+
+
 def init_tables(db: SqliteDatabase):
     with db:
         db.create_tables([
             NodeDBModel,
-            RibDBModel
+            RibDBModel,
+            RouteDBModel
         ])
         db.commit()
-

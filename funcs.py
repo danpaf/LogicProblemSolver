@@ -8,7 +8,7 @@ import networkx as nx
 import requests
 import time
 
-from db.models import NodeDBModel, RibDBModel
+from db.models import NodeDBModel, RibDBModel, RouteDBModel
 from settings import init_db
 
 
@@ -47,7 +47,6 @@ def get_route(from_city, to_city):
     return distance, duration, None
 
 
-
 def remove_duplicates_from_json(filename):
     with open(filename, 'r') as f:
         data = json.load(f)
@@ -59,7 +58,6 @@ def remove_duplicates_from_json(filename):
             is_unique = True
             for unique_record in unique_data:
                 if 'city' in unique_record:
-                    # проверяем все поля кроме id
                     if all(city.get(key) == unique_record['city'].get(key) for key in city.keys() if key != 'id'):
                         is_unique = False
                         break
@@ -73,8 +71,28 @@ def remove_duplicates_from_json(filename):
         return json.load(f)
 
 
+def remove_duplicates_from_json_test(filename):
+    with open(filename, 'r') as f:
+        data = json.load(f)
 
+    unique_data = []
+    for record in data:
+        if 'city' in record:
+            city = record['city']
+            is_unique = True
+            for unique_record in unique_data:
+                if city in tuple(unique_record):
+                    if all(city.get(key == unique_record['city'].get(key) for key in city.keys() if key != 'id')):
+                        is_unique = False
+                        break
+            if is_unique:
+                unique_data.append(record)
 
+    with open(filename, 'w') as f:
+        json.dump(unique_data, f, ensure_ascii=False, indent=4)
+
+    with open(filename, 'r') as f:
+        return json.load(f)
 
 
 def getRoutes():
@@ -119,7 +137,6 @@ def getRoutes():
                 cycles.append(cycle)
 
     answers = []
-
     for cycle in cycles:
         ...
         cycle_dates = []
@@ -148,10 +165,9 @@ def getRoutes():
             if last_edge is not None:
                 end_date = last_edge['weight']['date']
                 formatted_end_date = datetime.datetime.strptime(str(end_date), '%Y-%m-%d').date()
-                if(formatted_start_date < formatted_end_date):
+                if (formatted_start_date < formatted_end_date):
                     interval = formatted_end_date - formatted_start_date
                     if interval <= datetime.timedelta(days=2):
-
 
                         for i in range(len(cycle) - 1):
                             edge_data = G.get_edge_data(cycle[i], cycle[i + 1])
@@ -163,8 +179,6 @@ def getRoutes():
 
                             if i == 0:
                                 from_city_type = edge_data[0]['weight'].get('edge_type')
-
-
 
         id += 1
         answers.append({
@@ -178,11 +192,27 @@ def getRoutes():
 
                 'from': from_city,
                 'to': to_city,
-                'id': f'{uuid.uuid4()}',
             }})
 
     answers = list(filter(lambda x: x['city']['weight'] > 0, answers))
     answers = sorted(answers, key=lambda x: (x['city']['len'], -x['city']['weight']))
+    for answer in answers:
+
+        city_data = answer['city']
+        cycle_str = ', '.join(city_data['cycle'])
+        try:
+            RouteDBModel.get_or_create(
+                cycle=cycle_str,
+                weight=city_data['weight'],
+                length=city_data['len'],
+                edge_type=city_data['edge_type'],
+                start_date=datetime.datetime.strptime(city_data['start_date'], '%d.%m.%Y'),
+                end_date=datetime.datetime.strptime(city_data['end_date'], '%d.%m.%Y'),
+                cityfrom=city_data['from'],
+                cityto=city_data['to']
+            )
+        except Exception as e:
+            print(f"Error occurred while inserting data: {e}")
 
     with open('answers.json', 'w') as f:
         json.dump(answers, f, ensure_ascii=False, indent=4)
