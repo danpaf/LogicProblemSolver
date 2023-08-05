@@ -1,7 +1,9 @@
-from peewee import CharField, DateField, UUIDField, TimeField, IntegerField
+from datetime import datetime
+
+from peewee import CharField, DateField, UUIDField, TimeField, IntegerField, DateTimeField
 from peewee import Model, DatabaseProxy, ForeignKeyField
 from peewee import SqliteDatabase
-
+import bcrypt
 import uuid
 
 db_proxy = DatabaseProxy()
@@ -45,11 +47,55 @@ class RouteDBModel(Model):
         database = db_proxy
 
 
+class UserDBModel(Model):
+    uuid = UUIDField(primary_key=True, default=uuid.uuid4)
+    login = CharField(unique=True)
+    password_hash = CharField()
+    registration_date = DateTimeField(default=datetime.now)
+
+    class Meta:
+        db_table = 'users'
+        database = db_proxy
+
+    def set_password(self, password):
+        self.password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+    def check_password(self, password):
+        return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
+
+
+class ModeratorDBModel(Model):
+    uuid = UUIDField(primary_key=True, default=uuid.uuid4)
+    login = CharField(unique=True)
+    registration_date = DateTimeField(default=datetime.now)
+
+    class Meta:
+        db_table = 'moderators'
+        database = db_proxy
+
+
+class AdminDBModel(Model):
+    uuid = UUIDField(primary_key=True, default=uuid.uuid4)
+    login = CharField(unique=True)
+    registration_date = DateTimeField(default=datetime.now)
+
+    # Relationships
+    user = ForeignKeyField(UserDBModel, backref='admin', null=True)  # Admin is associated with a User
+    moderator = ForeignKeyField(ModeratorDBModel, backref='admin', null=True)  # Admin is associated with a Moderator
+
+    class Meta:
+        db_table = 'admins'
+        database = db_proxy
+
+
 def init_tables(db: SqliteDatabase):
     with db:
         db.create_tables([
             NodeDBModel,
             RibDBModel,
-            RouteDBModel
+            RouteDBModel,
+            UserDBModel,
+            AdminDBModel,
+            ModeratorDBModel,
         ])
         db.commit()
